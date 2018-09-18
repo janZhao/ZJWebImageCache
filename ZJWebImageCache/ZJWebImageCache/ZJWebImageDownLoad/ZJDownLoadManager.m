@@ -8,6 +8,7 @@
 
 #import "ZJDownLoadManager.h"
 
+
 #define KMaxConcurrentOperationCount 5
 
 @interface ZJDownLoadManager()

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+
 @interface ZJMemoryCacheManager : NSObject
 
 // 根据URL缓存去取图片

@@ -8,6 +8,7 @@
 
 #import "ZJMemoryCacheManager.h"
 
+
 #define  kMaxCacheCount 100
 
 // 缓存字典

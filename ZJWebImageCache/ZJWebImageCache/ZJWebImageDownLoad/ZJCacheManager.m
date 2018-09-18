@@ -10,6 +10,7 @@
 #import "ZJDiskCacheManager.h"
 #import "ZJMemoryCacheManager.h"
 
+
 @interface ZJCacheManager()
 
 @property (strong, nonatomic) ZJDiskCacheManager *diskCache;

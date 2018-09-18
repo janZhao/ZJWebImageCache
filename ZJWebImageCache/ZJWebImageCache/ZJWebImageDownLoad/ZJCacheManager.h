@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+
 @interface ZJCacheManager : NSObject
 
 /** 根据下载链接查询图片文件 */

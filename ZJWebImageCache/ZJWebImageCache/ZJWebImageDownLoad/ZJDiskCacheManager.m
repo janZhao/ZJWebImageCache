@@ -8,6 +8,7 @@
 
 #import "ZJDiskCacheManager.h"
 
+
 /** 磁盘缓存阈值*/
 #define kMaxDiskCacheSize 1024 * 1024 *40 // 40MB
 

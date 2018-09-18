@@ -8,6 +8,7 @@
 
 #import "ZJImageDownLoadOperation.h"
 
+
 @interface ZJImageDownLoadOperation()
 
 @property (strong, nonatomic) NSURL *URL;

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+
 @interface ZJDiskCacheManager : NSObject
 
 // 根据图片下载链接、在沙盒中找到此文件

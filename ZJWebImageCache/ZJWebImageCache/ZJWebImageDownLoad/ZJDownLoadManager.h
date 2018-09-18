@@ -11,6 +11,8 @@
 #import "ZJImageDownLoadOperation.h"
 #import "ZJCacheManager.h"
 
+
+
 // 使用typedef声明block、这就声明了一个TraverseTreeHandler类型的block
 typedef void (^CompletionBlockHandler)(UIImage *image, NSError *error);
 
