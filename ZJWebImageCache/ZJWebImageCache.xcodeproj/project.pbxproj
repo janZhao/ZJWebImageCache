@@ -18,6 +18,7 @@
 		3873F7C22150E8EB005E36FD /* ZJCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3873F7BD2150E8EB005E36FD /* ZJCacheManager.m */; };
 		3873F7C32150E8EB005E36FD /* ZJMemoryCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3873F7BE2150E8EB005E36FD /* ZJMemoryCacheManager.m */; };
 		3873F7C42150E8EB005E36FD /* ZJDownLoadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3873F7BF2150E8EB005E36FD /* ZJDownLoadManager.m */; };
+		3873F7C7215235A1005E36FD /* ZJCachedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3873F7C6215235A1005E36FD /* ZJCachedImage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,8 @@
 		3873F7BD2150E8EB005E36FD /* ZJCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJCacheManager.m; sourceTree = "<group>"; };
 		3873F7BE2150E8EB005E36FD /* ZJMemoryCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJMemoryCacheManager.m; sourceTree = "<group>"; };
 		3873F7BF2150E8EB005E36FD /* ZJDownLoadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZJDownLoadManager.m; sourceTree = "<group>"; };
+		3873F7C5215235A1005E36FD /* ZJCachedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJCachedImage.h; sourceTree = "<group>"; };
+		3873F7C6215235A1005E36FD /* ZJCachedImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJCachedImage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,12 +97,14 @@
 				3873F7BF2150E8EB005E36FD /* ZJDownLoadManager.m */,
 				3873F7B62150E8EB005E36FD /* ZJImageDownLoadOperation.h */,
 				3873F7BB2150E8EB005E36FD /* ZJImageDownLoadOperation.m */,
-				3873F7BC2150E8EB005E36FD /* ZJDiskCacheManager.h */,
-				3873F7B72150E8EB005E36FD /* ZJDiskCacheManager.m */,
 				3873F7B92150E8EB005E36FD /* ZJCacheManager.h */,
 				3873F7BD2150E8EB005E36FD /* ZJCacheManager.m */,
+				3873F7BC2150E8EB005E36FD /* ZJDiskCacheManager.h */,
+				3873F7B72150E8EB005E36FD /* ZJDiskCacheManager.m */,
 				3873F7B82150E8EB005E36FD /* ZJMemoryCacheManager.h */,
 				3873F7BE2150E8EB005E36FD /* ZJMemoryCacheManager.m */,
+				3873F7C5215235A1005E36FD /* ZJCachedImage.h */,
+				3873F7C6215235A1005E36FD /* ZJCachedImage.m */,
 			);
 			path = ZJWebImageDownLoad;
 			sourceTree = "<group>";
@@ -180,6 +185,7 @@
 				3873F7C02150E8EB005E36FD /* ZJDiskCacheManager.m in Sources */,
 				3873F7AF2150E8B9005E36FD /* main.m in Sources */,
 				3873F7C42150E8EB005E36FD /* ZJDownLoadManager.m in Sources */,
+				3873F7C7215235A1005E36FD /* ZJCachedImage.m in Sources */,
 				3873F7A12150E8B7005E36FD /* AppDelegate.m in Sources */,
 				3873F7C32150E8EB005E36FD /* ZJMemoryCacheManager.m in Sources */,
 			);

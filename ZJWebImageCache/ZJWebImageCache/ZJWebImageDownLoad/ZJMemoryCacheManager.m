@@ -7,7 +7,7 @@
 //
 
 #import "ZJMemoryCacheManager.h"
-
+#import "ZJCachedImage.h"
 
 #define  kMaxCacheCount 100
 
@@ -15,6 +15,10 @@
 static NSMutableDictionary const *memoryCache;
 
 @interface ZJMemoryCacheManager()
+
+@property (strong, nonatomic) NSMutableDictionary<NSString *, ZJCachedImage *> *cachedImages;
+@property (assign, nonatomic) UInt64 currentMemoryUsage;
+@property (strong, nonatomic) dispatch_queue_t synchronizationQueue;
 
 @end
 
@@ -26,11 +30,106 @@ static NSMutableDictionary const *memoryCache;
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(applicationDidReceiveMemoryWarningNotification) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     }
     
+    return [self initWithMemoryCapacity:100*1024*1024 preferredMemoryCapacity:60*1024*1024];
+}
+
+-(instancetype)initWithMemoryCapacity:(UInt64)memoryCapacity preferredMemoryCapacity:(UInt64)preferredMemoryCapacity{
+    
+    if (self = [super init]) {
+        self.memoryCapacity = memoryCapacity;
+        self.prferredMemoryUsageAfterPurge = preferredMemoryCapacity;
+        self.cachedImages = [[NSMutableDictionary alloc]init];
+        
+        NSString *queueName = [NSString stringWithFormat:@"com.jyd.%@",[[NSUUID UUID] UUIDString]];
+        self.synchronizationQueue = dispatch_queue_create([queueName cStringUsingEncoding:queueName], DISPATCH_QUEUE_CONCURRENT);
+    }
+    
     return self;
+}
+
+-(UInt64)memoryUsage{
+    __block UInt64 result = 0;
+    
+    dispatch_sync(self.synchronizationQueue, ^{
+        result = self.currentMemoryUsage;
+    });
+    
+    return result;
 }
 
 +(void)initialize{
     memoryCache = [NSMutableDictionary dictionary];
+}
+
+-(void)addImage:(UIImage *)image withIdentifier:(NSString *)identifier{
+    dispatch_barrier_async(self.synchronizationQueue, ^{
+       
+        ZJCachedImage *cacheImage = [[ZJCachedImage alloc]init];
+        ZJCachedImage *previousCachedImage = self.cachedImages[identifier];
+        
+        if (previousCachedImage != nil) {
+            self.currentMemoryUsage -= previousCachedImage.totalBytes;
+        }
+        
+        self.cachedImages[identifier] = cacheImage;
+        self.currentMemoryUsage += cacheImage.totalBytes;
+    });
+    
+    dispatch_barrier_async(self.synchronizationQueue, ^{
+        if (self.currentMemoryUsage > self.memoryCapacity) {
+            UInt64 bytesToPurge = self.currentMemoryUsage - self.prferredMemoryUsageAfterPurge;
+            NSMutableArray<ZJCachedImage*> *sortedImages = [NSMutableArray arrayWithArray:self.cachedImages.allValues];
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"lastAcccessDate" ascending:YES];
+            [sortedImages sortUsingDescriptors:@[sortDescriptor]];
+            
+            UInt64 bytesPurged = 0;
+            
+            for (ZJCachedImage *cachedImage in sortedImages) {
+                [self.cachedImages removeObjectForKey:cachedImage.identifier];
+                bytesPurged += cachedImage.totalBytes;
+                if (bytesPurged >= bytesToPurge) {
+                    break;
+                }
+            }
+            self.currentMemoryUsage -= bytesToPurge;
+        }
+    });
+}
+
+- (BOOL)removeImageWithIdentifier:(NSString *)identifier {
+    __block BOOL removed = NO;
+    dispatch_barrier_sync(self.synchronizationQueue, ^{
+        ZJCachedImage *cachedImage = self.cachedImages[identifier];
+        if (cachedImage != nil) {
+            [self.cachedImages removeObjectForKey:identifier];
+            self.currentMemoryUsage -= cachedImage.totalBytes;
+            removed = YES;
+        }
+    });
+    return removed;
+}
+
+-(nullable UIImage *)imageWithIdentifier:(NSString *)identifier{
+    __block UIImage *image = nil;
+    dispatch_sync(self.synchronizationQueue, ^{
+        ZJCachedImage *cachedImage = self.cachedImages[identifier];
+        image = [cachedImage accessImage];
+    });
+    
+    return image;
+}
+
+
+- (BOOL)removeAllImages {
+    __block BOOL removed = NO;
+    dispatch_barrier_sync(self.synchronizationQueue, ^{
+        if (self.cachedImages.count > 0) {
+            [self.cachedImages removeAllObjects];
+            self.currentMemoryUsage = 0;
+            removed = YES;
+        }
+    });
+    return removed;
 }
 
 #pragma mark - 监听到内存警告通知，删除内存中所有图片
